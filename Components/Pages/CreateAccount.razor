@@ -1,0 +1,49 @@
+﻿@page "/createaccount"
+@using Microsoft.AspNetCore.Components.Forms
+@using UserClient.Components.klient
+
+@code {
+    public class LoginModel
+    {
+        public string Username { get; set; }
+        public string Password { get; set; }
+    }
+
+    [SupplyParameterFromForm]
+    private LoginModel User { get; set; }
+
+    private string Message { get; set; }
+    string site = "1";
+
+    protected override void OnInitialized() => User ??= new();
+
+    public void printUser() => SocketClientHandler.SendUserToServer(User.Username, User.Password, site);
+
+}
+
+<h1>Create account</h1>
+
+<div>
+    <EditForm Model="User" OnValidSubmit="printUser" FormName="User">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <div>
+            <label>
+                Username:
+                <InputText @bind-Value="User.Username" />
+            </label>
+        </div>
+        <div>
+            <label for="password">
+                Password:
+                <InputText @bind-Value="User.Password" />
+            </label>
+        </div>
+        <div>
+            <button type="submit">Send</button>
+        </div>
+    </EditForm>
+
+    @* <p>@Message</p> *@
+
+</div>
